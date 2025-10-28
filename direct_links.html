@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏直接链接 - 游戏乐园</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1', // 紫蓝色
+                        secondary: '#EC4899', // 粉色
+                        snake: '#10B981', // 绿色
+                        plane: '#3B82F6', // 蓝色
+                        miner: '#F59E0B', // 黄色
+                        dark: '#1E293B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .btn-pop {
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+            .btn-pop::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+            .btn-pop:hover::before {
+                width: 300px;
+                height: 300px;
+            }
+            .bg-game-pattern {
+                background-image: 
+                    radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.05) 2%, transparent 0%),
+                    radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.05) 2%, transparent 0%);
+                background-size: 100px 100px;
+            }
+            .card-glass {
+                background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+                backdrop-filter: blur(10px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary to-secondary min-h-screen flex flex-col items-center justify-center p-4 font-sans bg-game-pattern">
+    <!-- 返回主页按钮 -->
+    <a href="index_select.html" class="absolute top-6 left-6 text-white hover:text-yellow-300 transition-colors flex items-center">
+        <i class="fa fa-arrow-left mr-2"></i> 返回游戏大厅
+    </a>
+    
+    <div class="card-glass rounded-2xl shadow-xl p-8 max-w-md w-full text-center border border-white/20">
+        <div class="mb-6">
+            <i class="fa fa-gamepad text-5xl text-primary animate-float"></i>
+        </div>
+        
+        <h1 class="text-3xl font-bold text-primary mb-6">
+            游戏直接链接
+        </h1>
+        
+        <p class="text-gray-700 mb-8">
+            这些是直接链接，可以直接在浏览器中打开游戏文件，无需通过服务器。
+        </p>
+        
+        <div class="space-y-5">
+            <a href="snake/index.html" class="block bg-snake hover:bg-snake/90 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg btn-pop">
+                <div class="flex items-center justify-center">
+                    <i class="fa fa-pagelines mr-3 text-xl"></i>
+                    <span>打开贪吃蛇游戏</span>
+                </div>
+            </a>
+            
+            <a href="thunder_plane/thunder-plane.html" class="block bg-plane hover:bg-plane/90 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg btn-pop">
+                <div class="flex items-center justify-center">
+                    <i class="fa fa-rocket mr-3 text-xl"></i>
+                    <span>打开雷霆飞机游戏</span>
+                </div>
+            </a>
+            
+            <a href="gold_miner/index.html" class="block bg-miner hover:bg-miner/90 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg btn-pop">
+                <div class="flex items-center justify-center">
+                    <i class="fa fa-diamond mr-3 text-xl"></i>
+                    <span>打开黄金矿工游戏</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p class="text-sm text-yellow-800 flex items-start">
+                <i class="fa fa-info-circle mr-2 mt-1"></i>
+                <span>如果链接无法正常工作，请直接在文件管理器中找到并打开对应的HTML文件。所有游戏文件都位于各自的文件夹中。</span>
+            </p>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer class="mt-12 text-white/80 text-sm">
+        <p>© 2024 游戏乐园 - 享受游戏的乐趣</p>
+    </footer>
+</body>
+</html>

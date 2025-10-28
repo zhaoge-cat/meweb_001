@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏乐园 - 选择你的游戏</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入Google字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基本样式 */
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #6366F1 0%, #EC4899 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* 游戏卡片样式 */
+        .game-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        /* 按钮样式 */
+        .game-button {
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .game-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* 图标动画 */
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .game-card:hover .game-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+            }
+            
+            .game-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .game-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-600 to-purple-600 min-h-screen flex flex-col">
+    <!-- 顶部导航 -->
+    <nav class="bg-black/50 backdrop-blur-sm p-4 text-white sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-gamepad text-2xl text-yellow-400"></i>
+                <h1 class="text-xl font-bold">游戏乐园</h1>
+            </div>
+            <div>
+                <a href="#" class="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-300">
+                    <i class="fa fa-home mr-2"></i>首页
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="flex-grow container mx-auto px-4 py-16">
+        <!-- 标题区域 -->
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">选择你的游戏</h2>
+            <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                从我们精心准备的游戏中选择一款，开始你的游戏之旅！
+            </p>
+        </div>
+
+        <!-- 游戏卡片网格 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- 贪吃蛇游戏 -->
+            <div class="game-card bg-white p-6 text-center">
+                <div class="game-icon text-green-500">
+                    <i class="fa fa-pagelines"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">贪吃蛇游戏</h3>
+                <p class="text-gray-600 mb-6">经典的贪吃蛇游戏，控制蛇移动并吃食物变得更长！</p>
+                <a href="snake/index.html" class="game-button bg-green-500 text-white w-full">
+                    <i class="fa fa-play mr-2"></i>开始游戏
+                </a>
+            </div>
+
+            <!-- 雷霆飞机游戏 -->
+            <div class="game-card bg-white p-6 text-center">
+                <div class="game-icon text-blue-500">
+                    <i class="fa fa-rocket"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">雷霆飞机游戏</h3>
+                <p class="text-gray-600 mb-6">刺激的射击游戏，控制飞机消灭敌机并躲避攻击！</p>
+                <a href="thunder_plane/thunder-plane.html" class="game-button bg-blue-500 text-white w-full">
+                    <i class="fa fa-play mr-2"></i>开始游戏
+                </a>
+            </div>
+
+            <!-- 黄金矿工游戏 -->
+            <div class="game-card bg-white p-6 text-center">
+                <div class="game-icon text-yellow-500">
+                    <i class="fa fa-diamond"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">黄金矿工游戏</h3>
+                <p class="text-gray-600 mb-6">经典的黄金矿工游戏，用钩子抓取金矿和其他物品！</p>
+                <a href="gold_miner/index.html" class="game-button bg-yellow-500 text-white w-full">
+                    <i class="fa fa-play mr-2"></i>开始游戏
+                </a>
+            </div>
+        </div>
+
+        <!-- 备用直接链接区域 -->
+        <div class="mt-16 p-6 bg-white/10 backdrop-blur-sm rounded-xl text-center">
+            <h3 class="text-2xl font-bold mb-4 text-white">直接游戏链接</h3>
+            <p class="text-white/80 mb-6">如果上面的游戏卡片无法正常工作，请尝试以下直接链接：</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="snake/index.html" class="game-button bg-green-500 text-white">
+                    直接进入贪吃蛇游戏
+                </a>
+                <a href="thunder_plane/thunder-plane.html" class="game-button bg-blue-500 text-white">
+                    直接进入雷霆飞机游戏
+                </a>
+                <a href="gold_miner/index.html" class="game-button bg-yellow-500 text-white">
+                    直接进入黄金矿工游戏
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/50 text-white p-6 text-center">
+        <div class="container mx-auto">
+            <p>&copy; 2023 游戏乐园 - 提供最佳游戏体验</p>
+            <p class="text-sm text-white/60 mt-2">使用方向键或鼠标控制游戏 | 按ESC键返回游戏大厅</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript确保导航可靠性 -->
+    <script>
+        // 增强游戏链接的可靠性
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有游戏链接
+            const gameLinks = document.querySelectorAll('a[href^="snake/"], a[href^="thunder_plane/"], a[href^="gold_miner/"]');
+            
+            // 为每个游戏链接添加点击事件处理
+            gameLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // 记录点击的游戏路径
+                    localStorage.setItem('lastGameClicked', this.getAttribute('href'));
+                    
+                    // 尝试正常导航
+                    const targetPath = this.getAttribute('href');
+                    
+                    // 创建一个隐藏的iframe来测试路径是否存在
+                    const testFrame = document.createElement('iframe');
+                    testFrame.style.display = 'none';
+                    testFrame.src = targetPath;
+                    testFrame.onload = function() {
+                        // 如果iframe加载成功，可以尝试导航
+                        window.location.href = targetPath;
+                    };
+                    testFrame.onerror = function() {
+                        // 如果iframe加载失败，可以尝试使用不同的路径格式
+                        console.warn('标准路径加载失败，尝试备用路径');
+                        // 这里可以添加备用路径逻辑
+                        window.location.href = targetPath;
+                    };
+                    
+                    document.body.appendChild(testFrame);
+                    
+                    // 短暂延迟后移除测试iframe
+                    setTimeout(() => {
+                        if (testFrame.parentNode) {
+                            testFrame.parentNode.removeChild(testFrame);
+                        }
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
