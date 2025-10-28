@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金矿工 - 经典游戏</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#FFD700',
+                        goldDark: '#DAA520',
+                        mine: '#8B4513',
+                        sky: '#87CEEB'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 刷新地图按钮样式 */
+        #refreshMapBtn {
+            white-space: nowrap;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        #refreshMapBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        #refreshMapBtn:active {
+            transform: translateY(0);
+        }
+        
+        /* 返回游戏大厅按钮样式 */
+        #backToLobbyBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3B82F6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        #backToLobbyBtn:hover {
+            background-color: #2563EB;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        /* 设置面板样式 */
+        .settings-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .settings-panel.active {
+            display: flex;
+        }
+        
+        .settings-content {
+            background: linear-gradient(to bottom right, #FFD700, #FFA500);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .setting-group {
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .setting-group input[type="radio"] {
+            margin-right: 5px;
+            accent-color: #DAA520;
+        }
+        
+        .setting-group input[type="checkbox"] {
+            accent-color: #DAA520;
+        }
+        
+        #applySettingsBtn:hover,
+        #closeSettingsBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        #applySettingsBtn:active,
+        #closeSettingsBtn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 flex flex-col items-center justify-center min-h-screen p-4">
+    <!-- 返回游戏大厅按钮 -->
+    <button id="backToLobbyBtn" onclick="backToLobby()">
+        <i class="fa fa-home"></i> 返回游戏大厅
+    </button>
+    
+    <div class="max-w-md w-full bg-slate-800 rounded-xl shadow-2xl overflow-hidden">
+        <!-- 游戏标题 -->
+        <div class="bg-gradient-to-r from-gold to-goldDark p-4 text-center">
+            <h1 class="text-3xl font-bold text-white">
+                <i class="fa fa-diamond mr-2"></i>黄金矿工
+            </h1>
+        </div>
+        
+        <!-- 游戏信息 -->
+        <div class="p-4 bg-slate-700 text-white flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <p class="text-sm opacity-80">分数</p>
+                <p id="score" class="text-2xl font-bold">0</p>
+            </div>
+            <div>
+                <p class="text-sm opacity-80">关卡</p>
+                <p id="level" class="text-2xl font-bold">1</p>
+            </div>
+            <div>
+                <p class="text-sm opacity-80">时间</p>
+                <p id="time" class="text-2xl font-bold">60</p>
+            </div>
+            <!-- 刷新地图按钮将通过JavaScript动态添加到这里 -->
+        </div>
+        
+        <!-- 游戏区域 -->
+        <div class="relative bg-sky w-full aspect-[4/3] overflow-hidden">
+            <!-- 游戏开始封面 - 重新设计 -->
+            <div id="start-screen" class="absolute inset-0 bg-gradient-to-b from-amber-900 via-amber-800 to-amber-950 flex flex-col items-center justify-center z-50">
+                <!-- 装饰元素 - 背景金币 -->
+                <div class="absolute inset-0 overflow-hidden opacity-20">
+                    <div class="absolute top-10 left-10 text-yellow-400 text-5xl animate-bounce"><i class="fa fa-diamond"></i></div>
+                    <div class="absolute bottom-20 right-10 text-yellow-300 text-4xl animate-pulse"><i class="fa fa-gold"></i></div>
+                    <div class="absolute top-1/3 right-1/4 text-yellow-200 text-3xl animate-bounce"><i class="fa fa-gem"></i></div>
+                    <div class="absolute bottom-1/4 left-1/4 text-yellow-100 text-4xl animate-pulse"><i class="fa fa-gold"></i></div>
+                </div>
+                
+                <!-- 游戏标题 -->
+                <div class="text-center mb-12 relative z-10">
+                    <div class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-200 p-2 rounded-2xl shadow-2xl mb-4">
+                        <i class="fa fa-diamond text-6xl text-amber-900"></i>
+                    </div>
+                    <h1 class="text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-200 mb-2 tracking-wider drop-shadow-lg">
+                        黄金矿工
+                    </h1>
+                    <div class="w-48 h-1 bg-gradient-to-r from-yellow-400 to-yellow-200 mx-auto rounded-full shadow-lg"></div>
+                </div>
+                
+                <!-- 3D风格游戏图标 -->
+                <div class="relative w-64 h-64 mb-12 perspective-1000">
+                    <div class="relative w-full h-full transform-style-3d transition-transform duration-500 hover:rotate-y-20 hover:rotate-x-5">
+                        <img src="https://picsum.photos/seed/goldminergame/600/600" alt="黄金矿工" 
+                             class="w-full h-full object-cover rounded-xl border-4 border-yellow-400 shadow-2xl shadow-amber-900/40">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent to-amber-500/30 rounded-xl"></div>
+                        <div class="absolute -bottom-4 -right-4 bg-yellow-400 text-amber-900 rounded-full w-24 h-24 flex items-center justify-center text-3xl font-bold shadow-lg hover:bg-yellow-300 transition-all duration-300 cursor-pointer">
+                            <i class="fa fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 游戏操作提示 - 卡片式设计 -->
+                <div class="bg-gradient-to-br from-amber-800/90 to-amber-900/90 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-amber-700 mb-8 w-4/5 max-w-md relative z-10">
+                    <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-amber-900 px-6 py-2 rounded-full font-bold shadow-lg">
+                        <i class="fa fa-gamepad mr-2"></i>游戏控制
+                    </div>
+                    
+                    <p class="text-yellow-100 text-xl font-medium mb-6 text-center mt-4">按空格键开始游戏</p>
+                    
+                    <div class="bg-amber-900/70 rounded-xl p-5">
+                        <h3 class="text-yellow-300 font-bold text-lg mb-4 flex items-center justify-center">
+                            <i class="fa fa-info-circle mr-2"></i>游戏说明
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3 text-yellow-100">
+                            <div class="flex items-center p-2 bg-amber-950/50 rounded-lg">
+                                <span class="bg-yellow-400 text-amber-900 rounded px-3 py-1 text-sm font-bold mr-3 shadow">空格</span>
+                                <span>抛出钩子捕捉物品</span>
+                            </div>
+                            <div class="flex items-center p-2 bg-amber-950/50 rounded-lg">
+                                <span class="bg-yellow-400 text-amber-900 rounded px-3 py-1 text-sm font-bold mr-3 shadow">R</span>
+                                <span>立即收回钩子</span>
+                            </div>
+                            <div class="flex items-center p-2 bg-amber-950/50 rounded-lg">
+                                <span class="bg-yellow-400 text-amber-900 rounded px-3 py-1 text-sm font-bold mr-3 shadow">P</span>
+                                <span>暂停/继续游戏</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 游戏特性 -->
+                <div class="grid grid-cols-3 gap-4 w-4/5 max-w-md mb-8">
+                    <div class="bg-amber-800/70 backdrop-blur-sm p-3 rounded-lg text-center">
+                        <i class="fa fa-diamond text-yellow-400 text-2xl mb-1"></i>
+                        <p class="text-yellow-100 text-xs">多种宝藏</p>
+                    </div>
+                    <div class="bg-amber-800/70 backdrop-blur-sm p-3 rounded-lg text-center">
+                        <i class="fa fa-clock-o text-yellow-400 text-2xl mb-1"></i>
+                        <p class="text-yellow-100 text-xs">时间挑战</p>
+                    </div>
+                    <div class="bg-amber-800/70 backdrop-blur-sm p-3 rounded-lg text-center">
+                        <i class="fa fa-level-up text-yellow-400 text-2xl mb-1"></i>
+                        <p class="text-yellow-100 text-xs">关卡晋级</p>
+                    </div>
+                </div>
+                
+                <!-- 页脚信息 -->
+                <div class="absolute bottom-6 left-0 right-0 text-center">
+                    <p class="text-yellow-400/70 text-sm">
+                        <i class="fa fa-copyright mr-1"></i> 黄金矿工游戏 © 2024
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 矿工 -->
+            <div id="miner" class="absolute top-2 left-1/2 transform -translate-x-1/2 w-16 h-16">
+                <div class="w-12 h-12 bg-mine rounded-full mx-auto"></div>
+                <div class="w-16 h-4 bg-mine mt-1"></div>
+            </div>
+            
+            <!-- 钩子 - 固定起始位置 -->
+            <div id="hook" class="absolute top-[29%] left-1/2 transform -translate-x-1/2 origin-top">
+                <div class="w-2 h-32 bg-gray-700"></div>
+                <div class="w-6 h-6 bg-gray-800 rounded-full -mt-1 mx-auto"></div>
+            </div>
+            
+            <!-- 游戏内容将通过JavaScript动态生成 -->
+        </div>
+        
+        <!-- 游戏控制 -->
+        <div class="p-4 bg-slate-700 space-y-3">
+            <button id="startBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-green-500/30">
+                <i class="fa fa-play mr-2"></i>开始游戏
+            </button>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button id="pauseBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-yellow-500/30">
+                    <i class="fa fa-pause mr-2"></i>暂停游戏
+                </button>
+                
+                <button id="retrieveBtn" class="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i class="fa fa-arrow-up mr-2"></i>回收钩子
+                </button>
+            </div>
+            
+            <button id="settingsBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-purple-500/30">
+                <i class="fa fa-cog mr-2"></i>游戏设置
+            </button>
+        </div>
+        
+        <!-- 设置面板 -->
+        <div id="settingsPanel" class="settings-panel">
+            <div class="settings-content">
+                <h2 class="text-center text-2xl font-bold text-amber-800 mb-6">游戏设置</h2>
+                
+                <div class="setting-group mb-6">
+                    <h3 class="text-lg font-semibold text-amber-700 mb-3">钩子速度</h3>
+                    <div class="flex items-center gap-4">
+                        <label class="text-amber-900"><input type="radio" name="hookSpeed" value="slow" checked> 慢速</label>
+                        <label class="text-amber-900"><input type="radio" name="hookSpeed" value="normal"> 正常</label>
+                        <label class="text-amber-900"><input type="radio" name="hookSpeed" value="fast"> 快速</label>
+                    </div>
+                </div>
+                
+                <div class="setting-group mb-6">
+                    <h3 class="text-lg font-semibold text-amber-700 mb-3">难度设置</h3>
+                    <div class="flex items-center gap-4">
+                        <label class="text-amber-900"><input type="radio" name="difficulty" value="easy" checked> 简单</label>
+                        <label class="text-amber-900"><input type="radio" name="difficulty" value="medium"> 中等</label>
+                        <label class="text-amber-900"><input type="radio" name="difficulty" value="hard"> 困难</label>
+                    </div>
+                </div>
+                
+                <div class="setting-group mb-6">
+                    <h3 class="text-lg font-semibold text-amber-700 mb-3">游戏主题</h3>
+                    <div class="flex items-center gap-4">
+                        <label class="text-amber-900"><input type="radio" name="theme" value="classic" checked> 经典</label>
+                        <label class="text-amber-900"><input type="radio" name="theme" value="diamond"> 钻石</label>
+                        <label class="text-amber-900"><input type="radio" name="theme" value="deepsea"> 深海</label>
+                    </div>
+                </div>
+                
+                <div class="setting-group mb-8">
+                    <h3 class="text-lg font-semibold text-amber-700 mb-3">音效设置</h3>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="soundEnabled" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600"></div>
+                        <span class="ml-3 text-amber-900">启用音效</span>
+                    </label>
+                </div>
+                
+                <div class="flex gap-4 justify-end">
+                    <button id="applySettingsBtn" class="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-semibold transition-all">
+                        应用设置
+                    </button>
+                    <button id="closeSettingsBtn" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-6 rounded-lg font-semibold transition-all">
+                        关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 游戏提示 -->
+        <div class="p-3 bg-slate-800 text-center">
+            <p class="text-sm text-gray-300">
+                <i class="fa fa-info-circle mr-1"></i>空格: 抛出钩子 | R: 回收钩子 | P: 暂停/继续
+            </p>
+        </div>
+    </div>
+    
+    <!-- 游戏脚本 -->
+    <script src="game.js"></script>
+</body>
+</html>

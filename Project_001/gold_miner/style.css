@@ -1,0 +1,213 @@
+/* 黄金矿工游戏样式 */
+
+/* 防止页面滚动的基础样式 */
+body {
+    overflow: hidden; /* 防止页面滚动 */
+    touch-action: none; /* 防止触摸设备上的滚动和缩放 */
+    position: fixed; /* 固定视口 */
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* 动画效果 */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+@keyframes rock {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(5deg); }
+}
+
+/* 修改钩子摇摆动画，增加摇摆角度并确保transform-origin正确 */
+@keyframes swing {
+    0%, 100% { transform: translateX(-50%) rotate(-45deg); transform-origin: top center; }
+    50% { transform: translateX(-50%) rotate(45deg); transform-origin: top center; }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.7); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.9); }
+}
+
+/* 移除矿工动画，使矿工保持静止 */
+#miner {
+    transform: translateY(0); /* 确保矿工保持在固定位置 */
+}
+
+/* 钩子初始状态 - 优化动画使其与抛出动作更一致 */
+#hook {
+    position: absolute;
+    top: 29%;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+    transform-origin: top center; /* 确保旋转中心正确 */
+    z-index: 10;
+    animation: swing 1.5s ease-in-out infinite;
+    /* 移除可能的过渡效果，确保即时响应 */
+    transition: none !important;
+}
+
+/* 黄金元素 */
+.gold {
+    background-color: #FFD700;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
+}
+
+/* 大金块 */
+.gold-large {
+    background-color: #FFD700;
+    border-radius: 50%;
+    animation: glow 1.5s ease-in-out infinite;
+}
+
+/* 石头 */
+.stone {
+    background-color: #696969;
+    border-radius: 10px;
+}
+
+/* 钻石 */
+.diamond {
+    background-color: #B9F2FF;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: glow 1s ease-in-out infinite;
+}
+
+/* 炸弹 */
+.bomb {
+    background-color: #333;
+    border-radius: 50%;
+    position: relative;
+}
+
+.bomb::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 8px;
+    background-color: #333;
+}
+
+/* 游戏物品基础样式 */
+.game-item {
+    position: absolute;
+    /* 移除过渡效果，提高性能 */
+    transition: none;
+}
+
+/* 当钩子抓住物品时的动画 */
+.hooked {
+    animation: shake 0.2s ease-in-out infinite;
+}
+
+/* 游戏结束遮罩 */
+#gameOver {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 10;
+}
+
+#gameOver h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+#gameOver p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+#gameOver button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#gameOver button:hover {
+    background-color: #45a049;
+}
+
+/* 关卡完成提示 */
+#levelComplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #FFD700;
+    z-index: 10;
+}
+
+#levelComplete h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    animation: glow 1s ease-in-out infinite;
+}
+
+#levelComplete p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+#levelComplete button {
+    background-color: #FFD700;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#levelComplete button:hover {
+    background-color: #DAA520;
+}
+
+/* 隐藏元素 */
+.hidden {
+    display: none !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+    .max-w-md {
+        width: 100%;
+    }
+    
+    h1 {
+        font-size: 1.8rem !important;
+    }
+    
+    #score, #level, #time {
+        font-size: 1.5rem !important;
+    }
+}

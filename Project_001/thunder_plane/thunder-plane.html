@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雷电飞机游戏</title>
+    <link rel="stylesheet" href="thunder-plane.css">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        /* 返回游戏大厅按钮样式 */
+        #backToLobbyBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3B82F6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        #backToLobbyBtn:hover {
+            background-color: #2563EB;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <button id="backToLobbyBtn" title="返回游戏大厅 (Esc)">
+        <i class="fa fa-home"></i> 返回大厅
+    </button>
+    <div class="game-container">
+        <h1>雷霆飞机</h1>
+        <div class="game-info">
+            <div class="score">分数: <span id="score">0</span></div>
+            <div class="lives">生命: <span id="lives">3</span></div>
+            <div class="level">关卡: <span id="level">1</span></div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="controls">
+            <button id="startBtn" class="btn">开始游戏</button>
+            <button id="pauseBtn" class="btn">暂停</button>
+            <button id="restartBtn" class="btn">重新开始</button>
+            <button id="settingsBtn" class="btn settings">游戏设置</button>
+        </div>
+        
+        <!-- 设置面板 -->
+        <div id="settingsPanel" class="settings-panel">
+            <div class="settings-content">
+                <h2>游戏设置</h2>
+                
+                <div class="setting-group">
+                    <h3>游戏难度</h3>
+                    <div class="options">
+                        <label><input type="radio" name="difficulty" value="easy" checked> 简单</label>
+                        <label><input type="radio" name="difficulty" value="normal"> 普通</label>
+                        <label><input type="radio" name="difficulty" value="hard"> 困难</label>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>飞机颜色</h3>
+                    <div class="color-options">
+                        <label><input type="radio" name="planeColor" value="blue" checked> 蓝色</label>
+                        <label><input type="radio" name="planeColor" value="red"> 红色</label>
+                        <label><input type="radio" name="planeColor" value="green"> 绿色</label>
+                        <label><input type="radio" name="planeColor" value="purple"> 紫色</label>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>子弹样式</h3>
+                    <div class="options">
+                        <label><input type="radio" name="bulletStyle" value="classic" checked> 经典</label>
+                        <label><input type="radio" name="bulletStyle" value="fire"> 火球</label>
+                        <label><input type="radio" name="bulletStyle" value="laser"> 激光</label>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>音效设置</h3>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="soundEnabled" checked>
+                        <span class="slider"></span>
+                        <span class="label">启用音效</span>
+                    </label>
+                </div>
+                
+                <div class="setting-buttons">
+                    <button id="applySettingsBtn" class="btn primary">应用设置</button>
+                    <button id="closeSettingsBtn" class="btn">关闭</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <p>使用方向键或WASD控制飞机移动，空格键发射子弹</p>
+            <p>移动设备: 触摸屏幕左右区域移动，点击屏幕发射子弹</p>
+        </div>
+        
+        <!-- 游戏开始界面 -->
+        <div id="startScreen" class="screen">
+            <h2>雷霆飞机</h2>
+            <p>准备开始战斗！</p>
+            <button id="startGameBtn" class="screen-btn">开始游戏</button>
+        </div>
+        
+        <!-- 游戏结束界面 -->
+        <div id="gameOverScreen" class="screen hidden">
+            <h2>游戏结束</h2>
+            <p>最终分数: <span id="finalScore">0</span></p>
+            <p>达到关卡: <span id="finalLevel">1</span></p>
+            <button id="playAgainBtn" class="screen-btn">再来一局</button>
+        </div>
+        
+        <!-- 暂停界面 -->
+        <div id="pauseScreen" class="screen hidden">
+            <h2>游戏暂停</h2>
+            <button id="resumeBtn" class="screen-btn">继续游戏</button>
+        </div>
+    </div>
+    
+    <script src="thunder-plane.js"></script>
+</body>
+</html>

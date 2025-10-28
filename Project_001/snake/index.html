@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇游戏</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        /* 返回游戏大厅按钮样式 */
+        #backToLobbyBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3B82F6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        #backToLobbyBtn:hover {
+            background-color: #2563EB;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回游戏大厅按钮 -->
+    <button id="backToLobbyBtn" onclick="backToLobby()">
+        <i class="fa fa-home"></i> 返回游戏大厅
+    </button>
+    
+    <div class="game-container">
+        <h1>贪吃蛇游戏</h1>
+        <div class="score-board">
+            <div class="score">分数: <span id="score">0</span></div>
+            <div class="high-score">最高分: <span id="high-score">0</span></div>
+        </div>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div class="controls">
+            <button id="startBtn" class="btn">开始游戏</button>
+            <button id="pauseBtn" class="btn">暂停</button>
+            <button id="resetBtn" class="btn">重置</button>
+            <button id="speedBtn" class="btn speed-btn">加速</button>
+            <button id="settingsBtn" class="btn settings-btn">设置</button>
+        </div>
+        
+        <!-- 设置面板 -->
+        <div id="settingsPanel" class="settings-panel">
+            <div class="settings-content">
+                <h2>游戏设置</h2>
+                <div class="setting-group">
+                    <h3>蛇的颜色</h3>
+                    <div class="color-options">
+                        <label><input type="radio" name="snakeColor" value="#4CAF50" checked> 绿色</label>
+                        <label><input type="radio" name="snakeColor" value="#2196F3"> 蓝色</label>
+                        <label><input type="radio" name="snakeColor" value="#FF9800"> 橙色</label>
+                        <label><input type="radio" name="snakeColor" value="#9C27B0"> 紫色</label>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>蛇身体颜色</h3>
+                    <div class="color-options">
+                        <label><input type="radio" name="snakeBodyColor" value="#8BC34A" checked> 浅绿色</label>
+                        <label><input type="radio" name="snakeBodyColor" value="#64B5F6"> 浅蓝色</label>
+                        <label><input type="radio" name="snakeBodyColor" value="#FFB74D"> 浅黄色</label>
+                        <label><input type="radio" name="snakeBodyColor" value="#BA68C8"> 淡紫色</label>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>食物样式</h3>
+                    <div class="food-style-options">
+                        <label><input type="radio" name="foodStyle" value="apple" checked> 苹果</label>
+                        <label><input type="radio" name="foodStyle" value="cherry"> 樱桃</label>
+                        <label><input type="radio" name="foodStyle" value="banana"> 香蕉</label>
+                        <label><input type="radio" name="foodStyle" value="cookie"> 饼干</label>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>食物颜色</h3>
+                    <div class="color-options">
+                        <label><input type="radio" name="foodColor" value="#D32F2F" checked> 红色</label>
+                        <label><input type="radio" name="foodColor" value="#FFEB3B"> 黄色</label>
+                        <label><input type="radio" name="foodColor" value="#FF5722"> 橙色</label>
+                        <label><input type="radio" name="foodColor" value="#3F51B5"> 靛蓝色</label>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>游戏难度</h3>
+                    <div class="difficulty-options">
+                        <label><input type="radio" name="difficulty" value="easy" checked> 简单</label>
+                        <label><input type="radio" name="difficulty" value="medium"> 中等</label>
+                        <label><input type="radio" name="difficulty" value="hard"> 困难</label>
+                    </div>
+                </div>
+                <div class="settings-actions">
+                    <button id="applySettingsBtn" class="btn">应用设置</button>
+                    <button id="closeSettingsBtn" class="btn">关闭</button>
+                </div>
+            </div>
+        </div>
+        <div class="instructions">
+            <p>使用方向键控制蛇的移动，或点击屏幕上的方向按钮</p>
+        </div>
+        <div class="direction-controls">
+            <button class="direction-btn up" data-direction="up">↑</button>
+            <div class="middle-controls">
+                <button class="direction-btn left" data-direction="left">←</button>
+                <button class="direction-btn down" data-direction="down">↓</button>
+                <button class="direction-btn right" data-direction="right">→</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
